@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2535939824351983313}
   - component: {fileID: 5816238785807248620}
   - component: {fileID: 5750274565609768670}
+  - component: {fileID: 2166826999479709449}
   m_Layer: 0
   m_Name: Bundle
   m_TagString: Untagged
@@ -86,6 +87,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.14934939, y: 0.12704536, z: 0.1746581}
   m_Center: {x: 0.00086274743, y: 0.051827148, z: -0.00077632815}
+--- !u!114 &2166826999479709449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5078835135499182715}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd88b5fc4f495a64ab7a9bff60fe62d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cards: []
 --- !u!1001 &301780656294747149
 PrefabInstance:
   m_ObjectHideFlags: 0
