@@ -7,10 +7,12 @@ namespace Creative
 	{
 		[SerializeField] GameObject prefab;
 		[SerializeField] Transform spawnPosition;
+		[SerializeField] int spawnCount = 200;
 		IEnumerator Start()
 		{
-			for (int i = 0; i < 100; i++)
+			for (int i = 0; i < spawnCount; i++)
 			{
+
 				var go = Instantiate(prefab, transform);
 				go.transform.position = spawnPosition.position;
 				yield return new WaitForSeconds(.05f);
