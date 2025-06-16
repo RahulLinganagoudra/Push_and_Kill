@@ -9,9 +9,7 @@ namespace Creative
 		Green,
 		Blue,
 		Yellow,
-		Purple,
-		Cyan,
-		Magenta
+		Purple		
 	}
 	[CreateAssetMenu]
 	public class ColorData : ScriptableObject
@@ -23,7 +21,7 @@ namespace Creative
 			{
 				if (instance == null)
 				{
-					instance = Resources.Load<ColorData>("HexaBundleData");
+					instance = Resources.Load<ColorData>(nameof(ColorData));
 				}
 				return instance;
 			}
