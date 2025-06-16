@@ -34,18 +34,22 @@ namespace Creative
 
 			}
 			transform.position = Vector3.Lerp(startPosition.position, endPosition.position, time);
+			if (Input.GetKeyDown(KeyCode.Space))
+			{
+				MoveForward();
+			}
 		}
 
 		[ContextMenu("Move Backward")]
 		public void MoveForward()
 		{
 			canUpdate = false;
-			time += moveForwardAmount;
-
+			//time += moveForwardAmount;
+			float timeL = this.time;
 			DOTween.To(
 				getter: () => time,
-				setter: (x) => time = x,
-				endValue: time + moveForwardAmount,
+				setter: (x) => time = Mathf.Clamp01(x),
+				endValue: timeL - moveForwardAmount,
 				duration: .5f).OnComplete(() => canUpdate = true);
 		}
 	}
