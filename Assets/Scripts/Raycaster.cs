@@ -13,7 +13,8 @@ namespace Creative
 				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 				if (Physics.Raycast(ray, out hit, float.PositiveInfinity, tileMask) && hit.collider.TryGetComponent(out CardBundle cardBundle))
 				{
-					print($"Hit {hit.collider.name} && with the color type {cardBundle.ColorType}");
+					SlotManager.Instance.AddBundleToSlot(cardBundle);
+                    print($"Hit {hit.collider.name} && with the color type {cardBundle.ColorType}");
 				}
 			}
 		}

@@ -11,7 +11,8 @@ namespace Creative
 		Yellow,
 		Purple		
 	}
-	[CreateAssetMenu]
+
+    [CreateAssetMenu]
 	public class ColorData : ScriptableObject
 	{
 		static ColorData instance;
@@ -26,7 +27,13 @@ namespace Creative
 				return instance;
 			}
 		}
-		[System.Serializable]
+
+        public float SlotOffset { get => slotOffset; set => slotOffset = value; }
+        public float BundleOffset { get => bundleOffset; set => bundleOffset = value; }
+        public float TileInterval { get => tileInterval; set => tileInterval = value; }
+        public float TileJumpDuration { get => tileJumpDuration; set => tileJumpDuration = value; }
+
+        [System.Serializable]
 		public class VisualData
 		{
 			public ColorType colorType;
@@ -34,9 +41,12 @@ namespace Creative
 		}
 		[SerializeField] List<VisualData> materials;
 		[SerializeField] float slotOffset = 0.5f;
+		[SerializeField] float bundleOffset = 0.25f;
 
+		[SerializeField] float tileInterval = 1;
+		[SerializeField] float tileJumpDuration = 0.5f;
 
-		public Vector3 GetStackedPosition(int index, Vector3 startPosition, float slotOffset)
+        public Vector3 GetStackedPosition(int index, Vector3 startPosition, float slotOffset)
 		{
 			Vector3 offset = index * slotOffset * Vector3.up;
 

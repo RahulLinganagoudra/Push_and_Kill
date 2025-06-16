@@ -15,12 +15,15 @@ MonoBehaviour:
   materials:
   - colorType: 0
     material: {fileID: 2100000, guid: 87ab17de43d605e45830d806d5c3b96c, type: 2}
-  - colorType: 1
-    material: {fileID: 2100000, guid: bdf31df4e500b8a4cbe4ef6630dde014, type: 2}
   - colorType: 2
     material: {fileID: 2100000, guid: fd94ef48f8472c04b987616ed0bfdbdc, type: 2}
   - colorType: 3
     material: {fileID: 2100000, guid: f220b16aaaafcd6429516fc6adf1928a, type: 2}
+  - colorType: 1
+    material: {fileID: 2100000, guid: bdf31df4e500b8a4cbe4ef6630dde014, type: 2}
   - colorType: 4
-    material: {fileID: 2100000, guid: 286594dbc2c58114bb7f9b71469d5cc5, type: 2}
-  slotOffset: 0.5
+    material: {fileID: 2100000, guid: 19fbb884549dbba429a91b8422ce8559, type: 2}
+  slotOffset: 0.025
+  bundleOffset: 0.025
+  tileInterval: 0.1
+  tileJumpDuration: 0.45
