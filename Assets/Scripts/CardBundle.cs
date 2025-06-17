@@ -26,8 +26,7 @@ public class CardBundle : MonoBehaviour
 
 		foreach (var card in cards)
 		{
-			var renderer = card.GetComponent<Renderer>();
-			if (renderer != null)
+			if (card.TryGetComponent<Renderer>(out var renderer))
 			{
 				renderer.material = ColorData.Instance.GetMaterial(colorType);
 			}
