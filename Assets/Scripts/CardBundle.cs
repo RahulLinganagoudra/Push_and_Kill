@@ -36,7 +36,7 @@ public class CardBundle : MonoBehaviour
 	internal void RepositionChildren()
 	{
 		int i = 0;
-		foreach (Transform child in transform)
+		foreach (var child in cards)
 		{
 			child.transform.SetPositionAndRotation(ColorData.Instance.GetStackedPosition(i++, transform.position, ColorData.Instance.SlotOffset), Quaternion.identity);
 		}

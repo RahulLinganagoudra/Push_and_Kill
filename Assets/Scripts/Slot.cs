@@ -29,9 +29,9 @@ public class Slot : MonoBehaviour
 			.Append(
 				card.transform.DOJump(
 					ColorData.Instance.GetStackedPosition(i, targetPos, ColorData.Instance.SlotOffset),
-					1f, 1, ColorData.Instance.TileJumpDuration).SetEase(Ease.OutBounce))
-			.Append(
-				card.transform.DORotate(new Vector3(0, 0, 0), ColorData.Instance.TileJumpDuration).SetEase(Ease.OutBack)
+					1f, 1, ColorData.Instance.TileJumpDuration).SetEase(Ease.OutBack))
+			.Join(
+				card.transform.DORotate(new Vector3(0, 0, 0), ColorData.Instance.TileRotationDuration).SetEase(Ease.Linear)
 				);
 
 			bundleSequence.Join(cardSequence);

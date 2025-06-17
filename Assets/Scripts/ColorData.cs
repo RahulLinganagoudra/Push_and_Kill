@@ -16,6 +16,7 @@ namespace Creative
 	public class ColorData : ScriptableObject
 	{
 		static ColorData instance;
+
 		public static ColorData Instance
 		{
 			get
@@ -28,25 +29,27 @@ namespace Creative
 			}
 		}
 
-		public float SlotOffset { get => slotOffset; set => slotOffset = value; }
-		public float BundleOffset { get => bundleOffset; set => bundleOffset = value; }
-		public float TileInterval { get => tileInterval; set => tileInterval = value; }
-		public float TileJumpDuration { get => tileJumpDuration; set => tileJumpDuration = value; }
-		[field: SerializeField] public int MatchCount { get; internal set; } = 3; // Number of bundles to match before clearing the slot
-
 		[System.Serializable]
 		public class VisualData
 		{
 			public ColorType colorType;
 			public Material material;
 		}
+		[field: SerializeField] public int MatchCount { get; internal set; } = 3; // Number of bundles to match before clearing the slot
 		[SerializeField] List<VisualData> materials;
 		[SerializeField] float slotOffset = 0.5f;
 		[SerializeField] float bundleOffset = 0.25f;
 
 		[SerializeField] float tileInterval = 1;
 		[SerializeField] float tileJumpDuration = 0.5f;
+		[field: SerializeField] public float TileRotationDuration { get; internal set; }
 
+	
+
+		public float SlotOffset { get => slotOffset; set => slotOffset = value; }
+		public float BundleOffset { get => bundleOffset; set => bundleOffset = value; }
+		public float TileInterval { get => tileInterval; set => tileInterval = value; }
+		public float TileJumpDuration { get => tileJumpDuration; set => tileJumpDuration = value; }
 		public Vector3 GetStackedPosition(int index, Vector3 startPosition, float slotOffset)
 		{
 			Vector3 offset = index * slotOffset * Vector3.up;

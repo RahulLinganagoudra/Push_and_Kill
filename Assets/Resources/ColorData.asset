@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2519328a01b182a4bb84b14452b37f28, type: 3}
   m_Name: ColorData
   m_EditorClassIdentifier: 
+  <MatchCount>k__BackingField: 3
   materials:
   - colorType: 0
     material: {fileID: 2100000, guid: 87ab17de43d605e45830d806d5c3b96c, type: 2}
@@ -24,6 +25,7 @@ MonoBehaviour:
   - colorType: 4
     material: {fileID: 2100000, guid: 19fbb884549dbba429a91b8422ce8559, type: 2}
   slotOffset: 0.025
-  bundleOffset: 0.025
+  bundleOffset: 0.15
   tileInterval: 0.1
-  tileJumpDuration: 0.45
+  tileJumpDuration: 0.7
+  <TileRotationDuration>k__BackingField: 0.3
