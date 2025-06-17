@@ -39,7 +39,6 @@ public class Slot : MonoBehaviour
 		// Create a sequence for the card animations
 		Sequence cardsSequence = DOTween.Sequence();
 
-		cardsSequence.AppendInterval(0.1f); // Small delay before starting card animations
 
 		for (int i = 0; i < cardBundle.cards.Count; i++)
 		{
@@ -104,6 +103,5 @@ public class Slot : MonoBehaviour
 
 			Gizmos.DrawSphere(targetPos, 0.01f);
 		}
-
 	}
 }
