@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Creative
 {
-	public class CharacterController : MonoBehaviour
+	public class CharacterController : Singleton<CharacterController>
 	{
 		[SerializeField] Transform startPosition, endPosition;
 		[SerializeField] float backSpeed = .01f;
@@ -39,8 +39,6 @@ namespace Creative
 				MoveForward();
 			}
 		}
-
-		[ContextMenu("Move Backward")]
 		public void MoveForward()
 		{
 			canUpdate = false;

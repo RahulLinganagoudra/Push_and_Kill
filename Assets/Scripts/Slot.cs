@@ -57,7 +57,7 @@ public class Slot : MonoBehaviour
 			slotCards[i].gameObject.SetActive(false);
 		}
 		//TODO: Play Confetti;
-
+		Creative.CharacterController.Instance.MoveForward();
 		slotCards.Clear();
 	}
 
