@@ -5,70 +5,91 @@ using UnityEngine;
 
 public class Slot : MonoBehaviour
 {
-	public ColorType colorType;
+    public ColorType colorType;
 
-	public List<CardBundle> slotCards = new List<CardBundle>();
+    public List<CardBundle> slotCards = new List<CardBundle>();
 
-	public void AddBundle(CardBundle cardBundle)
-	{
-		Sequence bundleSequence = DOTween.Sequence();
+    public void AddBundle(CardBundle cardBundle)
+    {
+        Sequence bundleSequence = DOTween.Sequence();
 
-		Destroy(cardBundle.GetComponent<Rigidbody>()); // Remove Rigidbody if it exists to prevent physics interference
+        Destroy(cardBundle.GetComponent<Rigidbody>()); // Remove Rigidbody if it exists to prevent physics interference
 
-		Vector3 targetPos = ColorData.Instance.GetStackedPosition(slotCards.Count, transform.position, ColorData.Instance.BundleOffset);
-		cardBundle.UnParentChildren();
-		cardBundle.transform.SetPositionAndRotation(targetPos, Quaternion.identity);
+        Vector3 targetPos = ColorData.Instance.GetStackedPosition(slotCards.Count, transform.position, ColorData.Instance.BundleOffset);
 
-		for (int i = 0; i < cardBundle.cards.Count; i++)
-		{
-			Sequence cardSequence = DOTween.Sequence();
+        //cardBundle.transform.SetPositionAndRotation(targetPos, Quaternion.identity);
 
-			GameObject card = cardBundle.cards[i];
+        // First sequence: Scale up the bundle
+        bundleSequence
+            .Append(cardBundle.transform.DOMove(cardBundle.transform.position + new Vector3(0, 0.5f, -0.5f), 0.15f).SetEase(Ease.InOutQuad))
+            .Append(cardBundle.transform.DOScale(Vector3.one * 1.25f, 0.15f).SetEase(Ease.OutBack))
+            .Join(cardBundle.transform.DORotate(new Vector3(0, 0, 0), 0.15f).SetEase(Ease.Linear)
+                .OnComplete(() =>
+                {
+                    cardBundle.UnParentChildren();
+                }
+            ));
 
-			cardSequence.AppendInterval(ColorData.Instance.TileInterval * i)
-			.Append(
-				card.transform.DOJump(
-					ColorData.Instance.GetStackedPosition(i, targetPos, ColorData.Instance.SlotOffset),
-					1f, 1, ColorData.Instance.TileJumpDuration).SetEase(Ease.OutBack))
-			.Join(
-				card.transform.DORotate(new Vector3(0, 0, 0), ColorData.Instance.TileRotationDuration).SetEase(Ease.Linear)
-				);
+        // Create a sequence for the card animations
+        Sequence cardsSequence = DOTween.Sequence();
 
-			bundleSequence.Join(cardSequence);
-		}
+        cardsSequence.AppendInterval(0.1f); // Small delay before starting card animations
 
-		bundleSequence.OnComplete(() =>
-		{
-			cardBundle.transform.SetPositionAndRotation(targetPos, Quaternion.identity);
-			cardBundle.RepositionChildren();
-			TryMatch();
-		});
+        for (int i = 0; i < cardBundle.cards.Count; i++)
+        {
+            GameObject card = cardBundle.cards[i];
 
-		slotCards.Add(cardBundle);
-	}
+            Sequence cardSequence = DOTween.Sequence();
+            cardSequence
+                .AppendInterval(ColorData.Instance.TileInterval * i)
+                .Append(
+                    card.transform.DOJump(
+                        ColorData.Instance.GetStackedPosition(i, targetPos, ColorData.Instance.SlotOffset),
+                        1f, 1, ColorData.Instance.TileJumpDuration).SetEase(Ease.OutBack))
+                .Join(
+                    card.transform.DORotate(Vector3.zero, ColorData.Instance.TileRotationDuration).SetEase(Ease.Linear)
+                )
+                .Join(card.transform.DOScale(Vector3.one, 0.1f).SetEase(Ease.Flash));
 
-	private void TryMatch()
-	{
-		if (slotCards.Count < ColorData.Instance.MatchCount) return;
+            cardsSequence.Join(cardSequence);
+        }
 
-		for (int i = 0; i < slotCards.Count; i++)
-		{
-			slotCards[i].DestroyChildren();
-			slotCards[i].gameObject.SetActive(false);
-		}
-		//TODO: Play Confetti;
-		Creative.CharacterController.Instance.MoveForward();
-		slotCards.Clear();
-	}
+        // Append the cards sequence after the scale-up animation with a small delay
+        bundleSequence
+            .Append(cardsSequence);
 
-	private void OnDrawGizmos()
-	{
-		for (int i = 0; i < 5; i++)
-		{
-			Vector3 targetPos = ColorData.Instance.GetStackedPosition(i, transform.position, ColorData.Instance.BundleOffset);
+        bundleSequence.OnComplete(() =>
+        {
+            cardBundle.transform.SetPositionAndRotation(targetPos, Quaternion.identity);
+            cardBundle.RepositionChildren();
+            TryMatch();
+        });
 
-			Gizmos.DrawSphere(targetPos, 0.1f);
-		}
+        slotCards.Add(cardBundle);
+    }
 
-	}
+    private void TryMatch()
+    {
+        if (slotCards.Count < ColorData.Instance.MatchCount) return;
+
+        for (int i = 0; i < slotCards.Count; i++)
+        {
+            slotCards[i].DestroyChildren();
+            slotCards[i].gameObject.SetActive(false);
+        }
+        //TODO: Play Confetti;
+        Creative.CharacterController.Instance.MoveForward();
+        slotCards.Clear();
+    }
+
+    private void OnDrawGizmos()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            Vector3 targetPos = ColorData.Instance.GetStackedPosition(i, transform.position, ColorData.Instance.BundleOffset);
+
+            Gizmos.DrawSphere(targetPos, 0.1f);
+        }
+
+    }
 }

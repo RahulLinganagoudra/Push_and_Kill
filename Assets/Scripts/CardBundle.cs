@@ -44,7 +44,7 @@ public class CardBundle : MonoBehaviour
 
 	internal void UnParentChildren()
 	{
-		foreach (Transform card in transform)
+		foreach (var card in cards)
 		{
 			card.transform.parent = null;
 		}
