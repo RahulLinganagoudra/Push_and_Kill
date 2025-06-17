@@ -13,7 +13,7 @@ namespace Creative
 			for (int i = 0; i < spawnCount; i++)
 			{
 				var go = Instantiate(prefab, transform);
-				go.Init((ColorType)Random.Range(0, System.Enum.GetNames(typeof(ColorType)).Length));
+				go.Init( ColorData.Instance.GetRandomColorType());
 				go.transform.position = spawnPosition.position;
 				yield return new WaitForSeconds(.05f);
 			}

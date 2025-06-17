@@ -5,91 +5,105 @@ using UnityEngine;
 
 public class Slot : MonoBehaviour
 {
-    public ColorType colorType;
+	public ColorType colorType;
 
-    public List<CardBundle> slotCards = new List<CardBundle>();
+	public List<CardBundle> slotCards = new();
+	[SerializeField] MeshRenderer model;
 
-    public void AddBundle(CardBundle cardBundle)
-    {
-        Sequence bundleSequence = DOTween.Sequence();
 
-        Destroy(cardBundle.GetComponent<Rigidbody>()); // Remove Rigidbody if it exists to prevent physics interference
+	private void Start()
+	{
+		model.sharedMaterial = ColorData.Instance.GetMaterial(colorType);
+	}
+	public void AddBundle(CardBundle cardBundle)
+	{
+		Sequence bundleSequence = DOTween.Sequence();
 
-        Vector3 targetPos = ColorData.Instance.GetStackedPosition(slotCards.Count, transform.position, ColorData.Instance.BundleOffset);
+		Destroy(cardBundle.GetComponent<Rigidbody>()); // Remove Rigidbody if it exists to prevent physics interference
 
-        //cardBundle.transform.SetPositionAndRotation(targetPos, Quaternion.identity);
+		Vector3 targetPos = ColorData.Instance.GetStackedPosition(slotCards.Count, transform.position, ColorData.Instance.BundleOffset);
 
-        // First sequence: Scale up the bundle
-        bundleSequence
-            .Append(cardBundle.transform.DOMove(cardBundle.transform.position + new Vector3(0, 0.5f, -0.5f), 0.15f).SetEase(Ease.InOutQuad))
-            .Append(cardBundle.transform.DOScale(Vector3.one * 1.25f, 0.15f).SetEase(Ease.OutBack))
-            .Join(cardBundle.transform.DORotate(new Vector3(0, 0, 0), 0.15f).SetEase(Ease.Linear)
-                .OnComplete(() =>
-                {
-                    cardBundle.UnParentChildren();
-                }
-            ));
+		//cardBundle.transform.SetPositionAndRotation(targetPos, Quaternion.identity);
 
-        // Create a sequence for the card animations
-        Sequence cardsSequence = DOTween.Sequence();
+		// First sequence: Scale up the bundle
+		bundleSequence
+			.Append(cardBundle.transform.DOMove(cardBundle.transform.position + new Vector3(0, 0.5f, -0.5f), 0.15f).SetEase(Ease.InOutQuad))
+			.Append(cardBundle.transform.DOScale(Vector3.one * 1.25f, 0.15f).SetEase(Ease.OutBack))
+			.Join(cardBundle.transform.DORotate(new Vector3(0, 0, 0), 0.15f).SetEase(Ease.Linear)
+				.OnComplete(() =>
+				{
+					cardBundle.UnParentChildren();
+				}
+			));
 
-        cardsSequence.AppendInterval(0.1f); // Small delay before starting card animations
+		// Create a sequence for the card animations
+		Sequence cardsSequence = DOTween.Sequence();
 
-        for (int i = 0; i < cardBundle.cards.Count; i++)
-        {
-            GameObject card = cardBundle.cards[i];
+		cardsSequence.AppendInterval(0.1f); // Small delay before starting card animations
 
-            Sequence cardSequence = DOTween.Sequence();
-            cardSequence
-                .AppendInterval(ColorData.Instance.TileInterval * i)
-                .Append(
-                    card.transform.DOJump(
-                        ColorData.Instance.GetStackedPosition(i, targetPos, ColorData.Instance.SlotOffset),
-                        1f, 1, ColorData.Instance.TileJumpDuration).SetEase(Ease.OutBack))
-                .Join(
-                    card.transform.DORotate(Vector3.zero, ColorData.Instance.TileRotationDuration).SetEase(Ease.Linear)
-                )
-                .Join(card.transform.DOScale(Vector3.one, 0.1f).SetEase(Ease.Flash));
+		for (int i = 0; i < cardBundle.cards.Count; i++)
+		{
+			GameObject card = cardBundle.cards[i];
 
-            cardsSequence.Join(cardSequence);
-        }
+			Sequence cardSequence = DOTween.Sequence();
+			cardSequence
+				.AppendInterval(ColorData.Instance.TileInterval * i)
+				.Append(
+					card.transform.DOJump(
+						ColorData.Instance.GetStackedPosition(i, targetPos, ColorData.Instance.SlotOffset),
+						1f, 1, ColorData.Instance.TileJumpDuration).SetEase(Ease.OutBack))
+				.Join(
+					card.transform.DORotate(Vector3.zero, ColorData.Instance.TileRotationDuration).SetEase(Ease.Linear)
+				)
+				.Join(card.transform.DOScale(Vector3.one, 0.1f).SetEase(Ease.Flash));
 
-        // Append the cards sequence after the scale-up animation with a small delay
-        bundleSequence
-            .Append(cardsSequence);
+			cardsSequence.Join(cardSequence);
+		}
 
-        bundleSequence.OnComplete(() =>
-        {
-            cardBundle.transform.SetPositionAndRotation(targetPos, Quaternion.identity);
-            cardBundle.RepositionChildren();
-            TryMatch();
-        });
+		// Append the cards sequence after the scale-up animation with a small delay
+		bundleSequence
+			.Append(cardsSequence);
 
-        slotCards.Add(cardBundle);
-    }
+		bundleSequence.OnComplete(() =>
+		{
+			cardBundle.transform.SetPositionAndRotation(targetPos, Quaternion.identity);
+			cardBundle.RepositionChildren();
+			TryMatch();
+		});
 
-    private void TryMatch()
-    {
-        if (slotCards.Count < ColorData.Instance.MatchCount) return;
+		slotCards.Add(cardBundle);
+	}
 
-        for (int i = 0; i < slotCards.Count; i++)
-        {
-            slotCards[i].DestroyChildren();
-            slotCards[i].gameObject.SetActive(false);
-        }
-        //TODO: Play Confetti;
-        Creative.CharacterController.Instance.MoveForward();
-        slotCards.Clear();
-    }
+	private void TryMatch()
+	{
+		if (slotCards.Count < ColorData.Instance.MatchCount) return;
 
-    private void OnDrawGizmos()
-    {
-        for (int i = 0; i < 5; i++)
-        {
-            Vector3 targetPos = ColorData.Instance.GetStackedPosition(i, transform.position, ColorData.Instance.BundleOffset);
+		for (int i = 0; i < slotCards.Count; i++)
+		{
+			slotCards[i].DestroyChildren();
+			slotCards[i].gameObject.SetActive(false);
+		}
+		//TODO: Play Confetti;
+		Creative.CharacterController.Instance.MoveForward();
+		slotCards.Clear();
+		colorType = ColorData.Instance.GetRandomColorType();
+		Vector3 scale = model.transform.localScale;
+		Sequence scaleSequence = DOTween.Sequence();
+		scaleSequence.Append(model.transform.DOScale(0, .1f));
+		scaleSequence.Append(model.transform.DOScale(scale, .1f).OnStart(() =>
+		{
+			model.sharedMaterial = ColorData.Instance.GetMaterial(colorType);
+		}));
+	}
 
-            Gizmos.DrawSphere(targetPos, 0.1f);
-        }
+	private void OnDrawGizmos()
+	{
+		for (int i = 0; i < 5; i++)
+		{
+			Vector3 targetPos = ColorData.Instance.GetStackedPosition(i, transform.position, ColorData.Instance.BundleOffset);
 
-    }
+			Gizmos.DrawSphere(targetPos, 0.01f);
+		}
+
+	}
 }

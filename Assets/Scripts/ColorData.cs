@@ -6,10 +6,8 @@ namespace Creative
 	public enum ColorType
 	{
 		Red,
-		Green,
 		Blue,
 		Yellow,
-		Purple
 	}
 
 	[CreateAssetMenu]
@@ -44,12 +42,14 @@ namespace Creative
 		[SerializeField] float tileJumpDuration = 0.5f;
 		[field: SerializeField] public float TileRotationDuration { get; internal set; }
 
-	
+
 
 		public float SlotOffset { get => slotOffset; set => slotOffset = value; }
 		public float BundleOffset { get => bundleOffset; set => bundleOffset = value; }
 		public float TileInterval { get => tileInterval; set => tileInterval = value; }
 		public float TileJumpDuration { get => tileJumpDuration; set => tileJumpDuration = value; }
+		public List<VisualData> Materials { get => materials; set => materials = value; }
+
 		public Vector3 GetStackedPosition(int index, Vector3 startPosition, float slotOffset)
 		{
 			Vector3 offset = index * slotOffset * Vector3.up;
@@ -58,7 +58,7 @@ namespace Creative
 		}
 		public Material GetMaterial(ColorType colorType)
 		{
-			foreach (var data in materials)
+			foreach (var data in Materials)
 			{
 				if (data.colorType == colorType)
 				{
@@ -66,6 +66,10 @@ namespace Creative
 				}
 			}
 			return null; // or throw an exception if not found
+		}
+		public ColorType GetRandomColorType()
+		{
+			return (ColorType)Random.Range(0, Materials.Count);
 		}
 	}
 }
