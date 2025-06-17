@@ -9,10 +9,10 @@ namespace Creative
 		Green,
 		Blue,
 		Yellow,
-		Purple		
+		Purple
 	}
 
-    [CreateAssetMenu]
+	[CreateAssetMenu]
 	public class ColorData : ScriptableObject
 	{
 		static ColorData instance;
@@ -28,12 +28,13 @@ namespace Creative
 			}
 		}
 
-        public float SlotOffset { get => slotOffset; set => slotOffset = value; }
-        public float BundleOffset { get => bundleOffset; set => bundleOffset = value; }
-        public float TileInterval { get => tileInterval; set => tileInterval = value; }
-        public float TileJumpDuration { get => tileJumpDuration; set => tileJumpDuration = value; }
+		public float SlotOffset { get => slotOffset; set => slotOffset = value; }
+		public float BundleOffset { get => bundleOffset; set => bundleOffset = value; }
+		public float TileInterval { get => tileInterval; set => tileInterval = value; }
+		public float TileJumpDuration { get => tileJumpDuration; set => tileJumpDuration = value; }
+		[field: SerializeField] public int MatchCount { get; internal set; } = 3; // Number of bundles to match before clearing the slot
 
-        [System.Serializable]
+		[System.Serializable]
 		public class VisualData
 		{
 			public ColorType colorType;
@@ -46,7 +47,7 @@ namespace Creative
 		[SerializeField] float tileInterval = 1;
 		[SerializeField] float tileJumpDuration = 0.5f;
 
-        public Vector3 GetStackedPosition(int index, Vector3 startPosition, float slotOffset)
+		public Vector3 GetStackedPosition(int index, Vector3 startPosition, float slotOffset)
 		{
 			Vector3 offset = index * slotOffset * Vector3.up;
 
