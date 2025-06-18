@@ -50,21 +50,23 @@ public class Slot : MonoBehaviour
         {
             GameObject card = cardBundle.cards[i];
             Vector3 cardTargetPos = ColorData.Instance.GetStackedPosition(i, targetPos, ColorData.Instance.SlotOffset);
+			//cardTargetPos.z -= 0.15f;
 
             Sequence cardSequence = DOTween.Sequence();
             cardSequence
                 //.AppendInterval(ColorData.Instance.TileInterval * i)
                 // Drop animation from current position
-                .Append(card.transform.DOMove(cardTargetPos, ColorData.Instance.TileJumpDuration).SetEase(Ease.InOutBounce))
+                .Append(card.transform.DOMove(cardTargetPos, ColorData.Instance.TileJumpDuration).SetEase(Ease.InOutQuart))
                 // Bounce effect at the end
                 .AppendCallback(() => 
                 {
                     // Store current position for the bounce
                     Vector3 bouncePos = card.transform.position;
-                    card.transform.DOMove(bouncePos + Vector3.up * 0.01f, 0.1f).SetEase(Ease.OutQuad)
+                    card.transform.DOMove(bouncePos + Vector3.up * 0.005f, 0.05f).SetEase(Ease.OutQuad)
                         .OnComplete(() => 
                         {
-                            card.transform.DOMove(bouncePos, 0.1f).SetEase(Ease.InBounce);
+                            card.transform.DOMove(bouncePos, 0.025f).SetEase(Ease.InBounce);
+							card.transform.DOMove(bouncePos + Vector3.forward * 0.05f, 0.05f).SetEase(Ease.InQuad);
                         });
                 })
                 // Rotation during the drop

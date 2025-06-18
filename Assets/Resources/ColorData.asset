@@ -21,9 +21,9 @@ MonoBehaviour:
   - colorType: 1
     material: {fileID: 2100000, guid: e7ca76d52312523468bf6825adba5a59, type: 2}
   slotOffset: 0.52
-  bundleOffset: 0.03
+  bundleOffset: 0.04
   tileInterval: 0.1
-  tileJumpDuration: 0.3
+  tileJumpDuration: 0.55
   <TileRotationDuration>k__BackingField: 0.15
   <PickDuration>k__BackingField: 0.1
   <SlotScaleDownDuration>k__BackingField: 0.2
