@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5059802801553439825}
+  - component: {fileID: 3981202292185861041}
   m_Layer: 0
   m_Name: SpikeEnd
   m_TagString: Untagged
@@ -33,6 +34,27 @@ Transform:
   - {fileID: 7432340024580581099}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &3981202292185861041
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3520024872096030438}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1.1540405, z: 0.6293943}
+  m_Center: {x: 1.1636777e-17, y: -0.0041801524, z: 0.0009936608}
 --- !u!1 &8153160511726488933
 GameObject:
   m_ObjectHideFlags: 0

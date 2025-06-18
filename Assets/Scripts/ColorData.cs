@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Creative
@@ -70,7 +71,29 @@ namespace Creative
 			}
 			return null; // or throw an exception if not found
 		}
-		public ColorType GetRandomColorType()
+
+        public ColorType GetUnusedColorType()
+        {
+            // Get all possible ColorTypes
+            var allColorTypes = System.Enum.GetValues(typeof(ColorType)).Cast<ColorType>().ToList();
+
+            // Get all currently used ColorTypes from slots
+            var usedColorTypes = SlotManager.Instance.slots.Select(slot => slot.colorType).ToList();
+
+            // Find colors that are not used in any slot
+            var availableColorTypes = allColorTypes.Except(usedColorTypes).ToList();
+
+            // If there are available colors, return a random one from them
+            if (availableColorTypes.Any())
+            {
+                return availableColorTypes[Random.Range(0, availableColorTypes.Count)];
+            }
+
+            // If all colors are used, return a random color (fallback)
+            return GetRandomColorType();
+        }
+
+        public ColorType GetRandomColorType()
 		{
 			return (ColorType)Random.Range(0, Materials.Count);
 		}

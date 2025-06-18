@@ -1,4 +1,5 @@
 using DG.Tweening;
+using HighlightPlus;
 using UnityEngine;
 
 namespace Creative
@@ -50,5 +51,11 @@ namespace Creative
 				endValue: timeL - moveForwardAmount,
 				duration: forwardDuration).OnComplete(() => canUpdate = true);
 		}
+
+		public void HighlightCharacter()
+		{
+			var highlightEffect = GetComponentInChildren<HighlightEffect>();
+			highlightEffect.highlighted = true;
+        }
 	}
 }

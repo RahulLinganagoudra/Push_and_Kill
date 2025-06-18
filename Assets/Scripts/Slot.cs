@@ -1,6 +1,7 @@
 using Creative;
 using DG.Tweening;
 using HighlightPlus;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -33,7 +34,7 @@ public class Slot : MonoBehaviour
         bundleSequence
 			.Append(cardBundle.transform.DOMove(cardBundle.transform.position + new Vector3(0, 0.5f, -0.5f), ColorData.Instance.PickDuration).SetEase(Ease.InOutQuad))
 			.Append(cardBundle.transform.DOScale(Vector3.one * 1.25f, ColorData.Instance.PickDuration).SetEase(Ease.OutBack))
-			.Join(cardBundle.transform.DORotate(new Vector3(0, 0, 0), ColorData.Instance.PickDuration).SetEase(Ease.Linear)
+			.Join(cardBundle.transform.DORotate(new Vector3(0, 0, 0), ColorData.Instance.TileRotationDuration).SetEase(Ease.Linear)
 				.OnComplete(() =>
 				{
 					cardBundle.UnParentChildren();
@@ -52,7 +53,7 @@ public class Slot : MonoBehaviour
 
             Sequence cardSequence = DOTween.Sequence();
             cardSequence
-                .AppendInterval(ColorData.Instance.TileInterval * i)
+                //.AppendInterval(ColorData.Instance.TileInterval * i)
                 // Drop animation from current position
                 .Append(card.transform.DOMove(cardTargetPos, ColorData.Instance.TileJumpDuration).SetEase(Ease.InOutBounce))
                 // Bounce effect at the end
@@ -82,23 +83,25 @@ public class Slot : MonoBehaviour
 		{
 			cardBundle.transform.SetPositionAndRotation(targetPos, Quaternion.identity);
 			cardBundle.RepositionChildren();
-			TryMatch();
-		});
+            StartCoroutine(TryMatch());
+        });
 
 		slotCards.Add(cardBundle);
 	}
 
-	private void TryMatch()
+	private IEnumerator TryMatch()
 	{
-		if (slotCards.Count < ColorData.Instance.MatchCount) return;
+		if (slotCards.Count < ColorData.Instance.MatchCount) yield break;
 
-		//for (int i = 0; i < slotCards.Count; i++)
-		//{
-		//	slotCards[i].HighlightCards();
-		//}
+		yield return new WaitForSeconds(0.1f); // Wait for the last card to settle
 
-		//TODO: Play Confetti;
-		Creative.CharacterController.Instance.MoveForward();
+        //for (int i = 0; i < slotCards.Count; i++)
+        //{
+        //	slotCards[i].HighlightCards();
+        //}
+
+        //TODO: Play Confetti;
+        Creative.CharacterController.Instance.MoveForward();
 		colorType = ColorData.Instance.GetRandomColorType();
 		Vector3 scale = model.transform.localScale;
 		Sequence scaleSequence = DOTween.Sequence();
