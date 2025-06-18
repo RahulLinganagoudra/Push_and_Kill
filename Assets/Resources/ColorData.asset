@@ -19,7 +19,7 @@ MonoBehaviour:
   - colorType: 2
     material: {fileID: 2100000, guid: f220b16aaaafcd6429516fc6adf1928a, type: 2}
   - colorType: 1
-    material: {fileID: 2100000, guid: e7ca76d52312523468bf6825adba5a59, type: 2}
+    material: {fileID: 2100000, guid: fd94ef48f8472c04b987616ed0bfdbdc, type: 2}
   slotOffset: 0.52
   bundleOffset: 0.04
   tileInterval: 0.1

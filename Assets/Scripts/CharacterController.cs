@@ -11,10 +11,17 @@ namespace Creative
 		[SerializeField] float forwardDuration = .1f;
 		[SerializeField] float moveForwardAmount = .3f;
 
+		Animator labubiAnimator;
+
 		float time;
 		bool canUpdate = true;
 
-		private void Start()
+        private void Awake()
+        {
+            labubiAnimator = GetComponentInChildren<Animator>();
+        }
+
+        private void Start()
 		{
 			time = 0;
 			transform.position = Vector3.Lerp(startPosition.position, endPosition.position, time);
@@ -49,7 +56,22 @@ namespace Creative
 				getter: () => time,
 				setter: (x) => time = Mathf.Clamp01(x),
 				endValue: timeL - moveForwardAmount,
-				duration: forwardDuration).OnComplete(() => canUpdate = true);
+				duration: forwardDuration)
+				.OnStart(() => labubiAnimator.SetFloat("speed", 1f))
+				.OnUpdate(() =>
+				{
+					if (time < .05f)
+					{ 
+						canUpdate = true;
+                        labubiAnimator.SetFloat("speed", 0f);
+                    }
+                })
+                .OnComplete(() => 
+					{
+						canUpdate = true;
+						labubiAnimator.SetFloat("speed", 0f);
+                    }
+				);
 		}
 
 		public void HighlightCharacter()
