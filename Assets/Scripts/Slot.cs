@@ -1,5 +1,6 @@
 using Creative;
 using DG.Tweening;
+using HighlightPlus;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,14 +27,18 @@ public class Slot : MonoBehaviour
 		//cardBundle.transform.SetPositionAndRotation(targetPos, Quaternion.identity);
 
 		// First sequence: Scale up the bundle
-		bundleSequence
+		var cardBundleHighlight = cardBundle.GetComponentInChildren<HighlightEffect>();
+		cardBundleHighlight.highlighted = true;
+
+        bundleSequence
 			.Append(cardBundle.transform.DOMove(cardBundle.transform.position + new Vector3(0, 0.5f, -0.5f), 0.15f).SetEase(Ease.InOutQuad))
 			.Append(cardBundle.transform.DOScale(Vector3.one * 1.25f, 0.15f).SetEase(Ease.OutBack))
 			.Join(cardBundle.transform.DORotate(new Vector3(0, 0, 0), 0.15f).SetEase(Ease.Linear)
 				.OnComplete(() =>
 				{
 					cardBundle.UnParentChildren();
-				}
+					cardBundleHighlight.highlighted = false;
+                }
 			));
 
 		// Create a sequence for the card animations
@@ -77,22 +82,33 @@ public class Slot : MonoBehaviour
 	{
 		if (slotCards.Count < ColorData.Instance.MatchCount) return;
 
-		for (int i = 0; i < slotCards.Count; i++)
-		{
-			slotCards[i].DestroyChildren();
-			slotCards[i].gameObject.SetActive(false);
-		}
+		//for (int i = 0; i < slotCards.Count; i++)
+		//{
+		//	slotCards[i].HighlightCards();
+		//}
+
 		//TODO: Play Confetti;
 		Creative.CharacterController.Instance.MoveForward();
-		slotCards.Clear();
 		colorType = ColorData.Instance.GetRandomColorType();
 		Vector3 scale = model.transform.localScale;
 		Sequence scaleSequence = DOTween.Sequence();
 		scaleSequence.Append(model.transform.DOScale(0, .1f));
-		scaleSequence.Append(model.transform.DOScale(scale, .1f).OnStart(() =>
-		{
-			model.sharedMaterial = ColorData.Instance.GetMaterial(colorType);
-		}));
+		scaleSequence.Append(model.transform.DOScale(scale, .1f)
+			.OnStart(() =>
+			{
+				model.sharedMaterial = ColorData.Instance.GetMaterial(colorType);
+			})
+			.OnComplete(() =>
+			{
+                for (int i = 0; i < slotCards.Count; i++)
+                {
+					slotCards[i].DestroyChildren();
+					slotCards[i].gameObject.SetActive(false);
+                }
+
+				slotCards.Clear();
+            })
+		);
 	}
 
 	private void OnDrawGizmos()

@@ -1,4 +1,5 @@
 using Creative;
+using HighlightPlus;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -57,4 +58,13 @@ public class CardBundle : MonoBehaviour
 			child.SetActive(false);
 		}
 	}
+
+	internal void HighlightCards()
+	{
+		foreach (var card in cards)
+		{
+			var highlight = card.GetComponent<HighlightEffect>();
+			highlight.highlighted = true;
+        }
+    }
 }

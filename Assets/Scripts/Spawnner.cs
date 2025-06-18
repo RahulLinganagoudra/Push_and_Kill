@@ -7,6 +7,7 @@ namespace Creative
 	{
 		[SerializeField] CardBundle prefab;
 		[SerializeField] Transform spawnPosition;
+		[SerializeField] float spawnDelay = 0.01f;
 		[SerializeField] int spawnCount = 200;
 		IEnumerator Start()
 		{
@@ -15,7 +16,7 @@ namespace Creative
 				var go = Instantiate(prefab, transform);
 				go.Init( ColorData.Instance.GetRandomColorType());
 				go.transform.position = spawnPosition.position;
-				yield return new WaitForSeconds(.05f);
+				yield return new WaitForSeconds(spawnDelay);
 			}
 		}
 	}
