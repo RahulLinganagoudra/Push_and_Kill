@@ -1117,8 +1117,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startPosition: {fileID: 1124379602}
   endPosition: {fileID: 1903693628}
-  backSpeed: 0.02
-  forwardSpeed: 0.1
+  backSpeed: 0.025
+  forwardDuration: 3
   moveForwardAmount: 0.3
 --- !u!1 &1577110368
 GameObject:

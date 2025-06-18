@@ -23,5 +23,8 @@ MonoBehaviour:
   slotOffset: 0.52
   bundleOffset: 0.03
   tileInterval: 0.1
-  tileJumpDuration: 0.7
-  <TileRotationDuration>k__BackingField: 0.3
+  tileJumpDuration: 0.3
+  <TileRotationDuration>k__BackingField: 0.2
+  <PickDuration>k__BackingField: 0.175
+  <SlotScaleDownDuration>k__BackingField: 0.2
+  <SlotPopUpDuration>k__BackingField: 0.1

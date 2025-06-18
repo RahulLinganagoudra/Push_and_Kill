@@ -49,8 +49,11 @@ namespace Creative
 		public float TileInterval { get => tileInterval; set => tileInterval = value; }
 		public float TileJumpDuration { get => tileJumpDuration; set => tileJumpDuration = value; }
 		public List<VisualData> Materials { get => materials; set => materials = value; }
+        [field: SerializeField] public float PickDuration { get; internal set; }
+        [field: SerializeField] public float SlotScaleDownDuration { get; internal set; }
+        [field: SerializeField] public float SlotPopUpDuration { get; internal set; }
 
-		public Vector3 GetStackedPosition(int index, Vector3 startPosition, float slotOffset)
+        public Vector3 GetStackedPosition(int index, Vector3 startPosition, float slotOffset)
 		{
 			Vector3 offset = index * slotOffset * Vector3.up;
 

@@ -31,9 +31,9 @@ public class Slot : MonoBehaviour
 		cardBundleHighlight.highlighted = true;
 
         bundleSequence
-			.Append(cardBundle.transform.DOMove(cardBundle.transform.position + new Vector3(0, 0.5f, -0.5f), 0.15f).SetEase(Ease.InOutQuad))
-			.Append(cardBundle.transform.DOScale(Vector3.one * 1.25f, 0.15f).SetEase(Ease.OutBack))
-			.Join(cardBundle.transform.DORotate(new Vector3(0, 0, 0), 0.15f).SetEase(Ease.Linear)
+			.Append(cardBundle.transform.DOMove(cardBundle.transform.position + new Vector3(0, 0.5f, -0.5f), ColorData.Instance.PickDuration).SetEase(Ease.InOutQuad))
+			.Append(cardBundle.transform.DOScale(Vector3.one * 1.25f, ColorData.Instance.PickDuration).SetEase(Ease.OutBack))
+			.Join(cardBundle.transform.DORotate(new Vector3(0, 0, 0), ColorData.Instance.PickDuration).SetEase(Ease.Linear)
 				.OnComplete(() =>
 				{
 					cardBundle.UnParentChildren();
@@ -45,27 +45,37 @@ public class Slot : MonoBehaviour
 		Sequence cardsSequence = DOTween.Sequence();
 
 
-		for (int i = 0; i < cardBundle.cards.Count; i++)
-		{
-			GameObject card = cardBundle.cards[i];
+        for (int i = 0; i < cardBundle.cards.Count; i++)
+        {
+            GameObject card = cardBundle.cards[i];
+            Vector3 cardTargetPos = ColorData.Instance.GetStackedPosition(i, targetPos, ColorData.Instance.SlotOffset);
 
-			Sequence cardSequence = DOTween.Sequence();
-			cardSequence
-				.AppendInterval(ColorData.Instance.TileInterval * i)
-				.Append(
-					card.transform.DOJump(
-						ColorData.Instance.GetStackedPosition(i, targetPos, ColorData.Instance.SlotOffset),
-						1f, 1, ColorData.Instance.TileJumpDuration).SetEase(Ease.OutBack))
-				.Join(
-					card.transform.DORotate(Vector3.zero, ColorData.Instance.TileRotationDuration).SetEase(Ease.Linear)
-				)
-				.Join(card.transform.DOScale(Vector3.one, 0.1f).SetEase(Ease.Flash));
+            Sequence cardSequence = DOTween.Sequence();
+            cardSequence
+                .AppendInterval(ColorData.Instance.TileInterval * i)
+                // Drop animation from current position
+                .Append(card.transform.DOMove(cardTargetPos, ColorData.Instance.TileJumpDuration).SetEase(Ease.InOutBounce))
+                // Bounce effect at the end
+                .AppendCallback(() => 
+                {
+                    // Store current position for the bounce
+                    Vector3 bouncePos = card.transform.position;
+                    card.transform.DOMove(bouncePos + Vector3.up * 0.01f, 0.1f).SetEase(Ease.OutQuad)
+                        .OnComplete(() => 
+                        {
+                            card.transform.DOMove(bouncePos, 0.1f).SetEase(Ease.InBounce);
+                        });
+                })
+                // Rotation during the drop
+                .Insert(ColorData.Instance.TileInterval * i,
+                    card.transform.DORotate(Vector3.zero, ColorData.Instance.TileRotationDuration)
+                    .SetEase(Ease.Linear));
 
-			cardsSequence.Join(cardSequence);
-		}
+            cardsSequence.Join(cardSequence);
+        }
 
-		// Append the cards sequence after the scale-up animation with a small delay
-		bundleSequence
+        // Append the cards sequence after the scale-up animation with a small delay
+        bundleSequence
 			.Append(cardsSequence);
 
 		bundleSequence.OnComplete(() =>
@@ -92,22 +102,24 @@ public class Slot : MonoBehaviour
 		colorType = ColorData.Instance.GetRandomColorType();
 		Vector3 scale = model.transform.localScale;
 		Sequence scaleSequence = DOTween.Sequence();
-		scaleSequence.Append(model.transform.DOScale(0, .1f));
-		scaleSequence.Append(model.transform.DOScale(scale, .1f)
+		scaleSequence.Append(
+			model.transform.DOScale(0, ColorData.Instance.SlotScaleDownDuration)
+				.OnStart(() =>
+				{
+                    for (int i = 0; i < slotCards.Count; i++)
+                    {
+                        slotCards[i].DestroyChildren();
+                        slotCards[i].gameObject.SetActive(false);
+                    }
+
+                    slotCards.Clear();
+                })
+        );
+		scaleSequence.Append(model.transform.DOScale(scale, ColorData.Instance.SlotPopUpDuration)
 			.OnStart(() =>
 			{
 				model.sharedMaterial = ColorData.Instance.GetMaterial(colorType);
 			})
-			.OnComplete(() =>
-			{
-                for (int i = 0; i < slotCards.Count; i++)
-                {
-					slotCards[i].DestroyChildren();
-					slotCards[i].gameObject.SetActive(false);
-                }
-
-				slotCards.Clear();
-            })
 		);
 	}
 

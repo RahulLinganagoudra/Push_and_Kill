@@ -7,7 +7,7 @@ namespace Creative
 	{
 		[SerializeField] Transform startPosition, endPosition;
 		[SerializeField] float backSpeed = .01f;
-		[SerializeField] float forwardSpeed = .1f;
+		[SerializeField] float forwardDuration = .1f;
 		[SerializeField] float moveForwardAmount = .3f;
 
 		float time;
@@ -48,7 +48,7 @@ namespace Creative
 				getter: () => time,
 				setter: (x) => time = Mathf.Clamp01(x),
 				endValue: timeL - moveForwardAmount,
-				duration: .5f).OnComplete(() => canUpdate = true);
+				duration: forwardDuration).OnComplete(() => canUpdate = true);
 		}
 	}
 }
