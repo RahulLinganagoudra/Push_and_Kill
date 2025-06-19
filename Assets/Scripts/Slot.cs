@@ -91,44 +91,56 @@ public class Slot : MonoBehaviour
 		slotCards.Add(cardBundle);
 	}
 
-	private IEnumerator TryMatch()
-	{
-		if (slotCards.Count < ColorData.Instance.MatchCount) yield break;
+    private IEnumerator TryMatch()
+    {
+        if (slotCards.Count < ColorData.Instance.MatchCount) yield break;
 
-		yield return new WaitForSeconds(0.1f); // Wait for the last card to settle
+        yield return new WaitForSeconds(0.1f); // Wait for the last card to settle
 
-        //for (int i = 0; i < slotCards.Count; i++)
-        //{
-        //	slotCards[i].HighlightCards();
-        //}
-
-        //TODO: Play Confetti;
         Creative.CharacterController.Instance.MoveForward();
-		colorType = ColorData.Instance.GetRandomColorType();
-		Vector3 scale = model.transform.localScale;
-		Sequence scaleSequence = DOTween.Sequence();
-		scaleSequence.Append(
-			model.transform.DOScale(0, ColorData.Instance.SlotScaleDownDuration)
-				.OnStart(() =>
-				{
-                    for (int i = 0; i < slotCards.Count; i++)
-                    {
-                        slotCards[i].DestroyChildren();
-                        slotCards[i].gameObject.SetActive(false);
-                    }
+        colorType = ColorData.Instance.GetRandomColorType();
+        Vector3 scale = model.transform.localScale;
+        Sequence scaleSequence = DOTween.Sequence();
 
-                    slotCards.Clear();
-                })
+        // Create sequence for card scale-down animations
+        Sequence cardsScaleSequence = DOTween.Sequence();
+        for (int i = slotCards.Count - 1; i >= 0; i--)
+        {
+            CardBundle bundle = slotCards[i];
+            for (int j = bundle.cards.Count - 1; j >= 0; j--)
+            {
+                GameObject card = bundle.cards[j];
+                // Join instead of Append to make all cards scale simultaneously
+                cardsScaleSequence.AppendInterval(j * 0.0001f);
+                cardsScaleSequence.Join(
+                    card.transform.DOScale(Vector3.zero, 0.025f).SetEase(Ease.InBack)
+                );
+            }
+        }
+
+        scaleSequence
+            .Append(cardsScaleSequence)
+            .Append(model.transform.DOScale(0, ColorData.Instance.SlotScaleDownDuration))
+            .OnComplete(() =>
+            {
+                // Clean up after animations complete
+                for (int i = 0; i < slotCards.Count; i++)
+                {
+                    slotCards[i].DestroyChildren();
+                    slotCards[i].gameObject.SetActive(false);
+                }
+                slotCards.Clear();
+            });
+
+        scaleSequence.Append(model.transform.DOScale(scale, ColorData.Instance.SlotPopUpDuration)
+            .OnStart(() =>
+            {
+                model.sharedMaterial = ColorData.Instance.GetSlotMaterial(colorType);
+            })
         );
-		scaleSequence.Append(model.transform.DOScale(scale, ColorData.Instance.SlotPopUpDuration)
-			.OnStart(() =>
-			{
-				model.sharedMaterial = ColorData.Instance.GetSlotMaterial(colorType);
-			})
-		);
-	}
+    }
 
-	private void OnDrawGizmos()
+    private void OnDrawGizmos()
 	{
 		for (int i = 0; i < 8; i++)
 		{
