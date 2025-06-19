@@ -33,10 +33,11 @@ namespace Creative
 		{
 			public ColorType colorType;
 			public Material material;
-		}
+			public Material slotMaterial;
+        }
 		[field: SerializeField] public int MatchCount { get; internal set; } = 3; // Number of bundles to match before clearing the slot
 		[SerializeField] List<VisualData> materials;
-		[SerializeField] float slotOffset = 0.5f;
+        [SerializeField] float slotOffset = 0.5f;
 		[SerializeField] float bundleOffset = 0.25f;
 
 		[SerializeField] float tileInterval = 1;
@@ -71,6 +72,19 @@ namespace Creative
 			}
 			return null; // or throw an exception if not found
 		}
+
+		public Material GetSlotMaterial(ColorType colorType)
+		{
+			foreach (var data in Materials)
+			{
+				if (data.colorType == colorType)
+				{
+					return data.slotMaterial;
+                }
+            }
+
+			return null; // or throw an exception if not found
+        }
 
         public ColorType GetUnusedColorType()
         {

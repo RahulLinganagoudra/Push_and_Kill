@@ -1,4 +1,5 @@
 using Creative;
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,8 @@ public class SlotManager : Singleton<SlotManager>
         else
         {
             Debug.LogWarning($"No slot found for color type: {cardBundle.ColorType}");
+
+            cardBundle.transform.DOShakePosition(0.25f, 0.1f, 15, 90, false, true);
         }
     }
 

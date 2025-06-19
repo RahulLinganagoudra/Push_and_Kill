@@ -12,16 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2519328a01b182a4bb84b14452b37f28, type: 3}
   m_Name: ColorData
   m_EditorClassIdentifier: 
-  <MatchCount>k__BackingField: 5
+  <MatchCount>k__BackingField: 8
   materials:
   - colorType: 0
     material: {fileID: 2100000, guid: 87ab17de43d605e45830d806d5c3b96c, type: 2}
+    slotMaterial: {fileID: 2100000, guid: fc57e0f506edd87429863de56209e04f, type: 2}
   - colorType: 2
     material: {fileID: 2100000, guid: f220b16aaaafcd6429516fc6adf1928a, type: 2}
+    slotMaterial: {fileID: 2100000, guid: 8e9a8b30fec5fc048af1f3ba03dd2003, type: 2}
   - colorType: 1
     material: {fileID: 2100000, guid: fd94ef48f8472c04b987616ed0bfdbdc, type: 2}
+    slotMaterial: {fileID: 2100000, guid: facd22d751db94441be6c6ef848c5480, type: 2}
   slotOffset: 0.52
-  bundleOffset: 0.04
+  bundleOffset: 0.06
   tileInterval: 0.1
   tileJumpDuration: 0.55
   <TileRotationDuration>k__BackingField: 0.15

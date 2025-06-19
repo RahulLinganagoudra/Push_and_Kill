@@ -15,7 +15,7 @@ public class Slot : MonoBehaviour
 
 	private void Start()
 	{
-		model.sharedMaterial = ColorData.Instance.GetMaterial(colorType);
+		model.sharedMaterial = ColorData.Instance.GetSlotMaterial(colorType);
 	}
 	public void AddBundle(CardBundle cardBundle)
 	{
@@ -123,14 +123,14 @@ public class Slot : MonoBehaviour
 		scaleSequence.Append(model.transform.DOScale(scale, ColorData.Instance.SlotPopUpDuration)
 			.OnStart(() =>
 			{
-				model.sharedMaterial = ColorData.Instance.GetMaterial(colorType);
+				model.sharedMaterial = ColorData.Instance.GetSlotMaterial(colorType);
 			})
 		);
 	}
 
 	private void OnDrawGizmos()
 	{
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < 8; i++)
 		{
 			Vector3 targetPos = ColorData.Instance.GetStackedPosition(i, transform.position, ColorData.Instance.BundleOffset);
 
