@@ -24,7 +24,7 @@ MonoBehaviour:
     material: {fileID: 2100000, guid: fd94ef48f8472c04b987616ed0bfdbdc, type: 2}
     slotMaterial: {fileID: 2100000, guid: facd22d751db94441be6c6ef848c5480, type: 2}
   slotOffset: 0.52
-  bundleOffset: 0.06
+  bundleOffset: 0.05
   tileInterval: 0.1
   tileJumpDuration: 0.55
   <TileRotationDuration>k__BackingField: 0.15
